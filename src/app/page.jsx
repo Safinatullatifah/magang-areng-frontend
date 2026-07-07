@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import TopBanner from "../../components/TopBanner";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import { useRouter } from "next/navigation";
+import TopBanner from "../components/TopBanner";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function ProdukPage() {
+  const router = useRouter();
   const [lang, setLang] = useState("id");
   const [isCartOpen, setIsCartOpen] = useState(false);
   
@@ -75,17 +77,27 @@ export default function ProdukPage() {
       <TopBanner lang={lang} toggleLanguage={toggleLanguage} />
       <Navbar lang={lang} onCartClick={toggleCart} />
 
-      {/* HERO, MENGAPA KAMI, PRODUCT GRID (Tetap sama seperti sebelumnya) */}
-      <section className="relative h-[60vh] flex items-center justify-center text-center px-4">
-        <div className="absolute inset-0 bg-gray-900 overflow-hidden">
-            <div className="w-full h-full bg-gray-800 opacity-50"></div>
+      {/* 1. HERO SECTION */}
+      <section id="hero" className="relative h-[60vh] flex items-center justify-center text-center px-4">
+        
+        {/* Background Image Asli */}
+        <div className="absolute inset-0 z-0 bg-gray-900">
+          <img 
+            src="/hero.png" 
+            alt="Arang Briket Premium" 
+            className="w-full h-full object-cover opacity-60" 
+          />
         </div>
+
+        {/* Konten Teks */}
         <div className="relative z-10 max-w-4xl text-white">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t.hero.title}</h1>
           <p className="text-lg md:text-xl text-gray-200 mb-8 px-8">{t.hero.subtitle}</p>
-          <button className="bg-white text-gray-900 font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition shadow-lg">
-            {t.hero.btn}
-          </button>
+          <Link href="#produk">
+            <button className="bg-white text-gray-900 font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition shadow-lg cursor-pointer">
+              {t.hero.btn}
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -99,7 +111,7 @@ export default function ProdukPage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto py-12 px-8">
+      <section id="produk" className="max-w-7xl mx-auto py-12 px-8">
         <div className="text-center mb-12">
             <span className="text-[#4C9A2A] font-bold text-sm tracking-widest">{t.productSub}</span>
             <h2 className="text-3xl font-bold mt-2">{t.productTitle}</h2>
@@ -151,7 +163,7 @@ export default function ProdukPage() {
       </section>
 
       {/* 4. PROSES PRODUKSI (Dengan Gambar Full) */}
-      <section className="bg-white py-16 px-8 border-t border-gray-100">
+      <section id="proses" className="bg-white py-16 px-8 border-t border-gray-100">
          <div className="max-w-5xl mx-auto text-center mb-12">
             <span className="text-[#4C9A2A] font-bold text-sm tracking-widest">PROSES KAMI</span>
             <h2 className="text-3xl font-bold mt-2 mb-12">Bahan Baku Hingga Briket Siap Pakai</h2>
@@ -169,7 +181,7 @@ export default function ProdukPage() {
       </section>
 
       {/* 5. BANTUAN / FAQ (Accordion Interaktif) */}
-      <section className="bg-[#F9F9F9] py-16 px-8 border-t border-gray-200 mb-12">
+      <section id="bantuan" className="bg-[#F9F9F9] py-16 px-8 border-t border-gray-200 mb-12">
          <div className="max-w-3xl mx-auto">
              <div className="text-center mb-10">
                 <span className="text-[#4C9A2A] font-bold text-sm tracking-widest">BANTUAN</span>
@@ -214,19 +226,38 @@ export default function ProdukPage() {
       <Footer />
 
       {/* CART DRAWER */}
-      {isCartOpen && <div className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity" onClick={toggleCart} />}
+      
+      {/* 1. Perbaikan Overlay Hitam (Gunakan bg-black/60 dan sedikit efek blur) */}
+      {isCartOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-all" 
+          onClick={toggleCart} 
+        />
+      )}
+
       <div className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        
+        {/* Header Keranjang */}
         <div className="flex items-center gap-4 p-6 border-b border-gray-200">
             <button onClick={toggleCart} className="text-gray-500 hover:text-black">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
             </button>
-            <h2 className="font-bold tracking-wide text-gray-800">KERANJANG</h2>
+            <h2 className="font-bold tracking-wide text-gray-800 flex items-center gap-2">
+              KERANJANG
+            </h2>
         </div>
+
+        {/* List Item Keranjang */}
         <div className="flex-1 overflow-y-auto p-6 flex flex-col">
             <div className="flex flex-col gap-6">
                 {cartItems.map((item) => (
                     <div key={item.id} className="flex gap-4 items-center">
-                        <div className="w-16 h-16 bg-gray-300 rounded-lg"></div>
+                        <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden shrink-0">
+                           {/* Menampilkan gambar dummy jika ada */}
+                           {item.image && <img src={item.image} alt={item.name} className="w-full h-full object-cover" />}
+                        </div>
                         <div className="flex-1">
                             <h4 className="text-sm font-bold text-gray-800">{item.name}</h4>
                             <div className="text-sm font-semibold text-gray-600">Rp {item.price.toLocaleString('id-ID')}</div>
@@ -235,8 +266,16 @@ export default function ProdukPage() {
                 ))}
             </div>
         </div>
+
+        {/* Footer Keranjang */}
         <div className="p-6 border-t border-gray-200 bg-gray-50">
-            <button className="w-full bg-[#4C9A2A] hover:bg-green-700 text-white font-bold py-4 rounded-lg transition shadow-md">Check out - Rp {totalPrice.toLocaleString('id-ID')}</button>
+            {/* 2. Perbaikan Tombol Checkout menggunakan router.push */}
+            <button 
+              onClick={() => router.push('/checkout')}
+              className="w-full bg-[#4C9A2A] hover:bg-green-700 text-white font-bold py-4 rounded-lg transition shadow-md"
+            >
+              Check out - Rp {totalPrice.toLocaleString('id-ID')}
+            </button>
         </div>
       </div>
     </div>

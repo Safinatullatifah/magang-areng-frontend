@@ -5,7 +5,7 @@ export default function Footer() {
         
         {/* Kolom 1: Logo & Sertifikasi */}
         <div>
-          <img src="/logo-navbar.svg" alt="Areng Logo" className="h-10 mb-4" />
+          <img src="/Logo.png" alt="Areng Logo" className="h-10 mb-4" />
           <p className="text-gray-600 font-bold mb-8 text-sm">Arang Premium untuk Setiap Kebutuhan</p>
           
           <h4 className="font-bold text-gray-800 mb-4">Sertifikasi</h4>
@@ -41,23 +41,33 @@ export default function Footer() {
         <div>
           <h4 className="font-bold text-gray-800 mb-4">Lokasi Kami</h4>
           <div className="w-full h-48 bg-gray-200 rounded-lg overflow-hidden border border-gray-300">
-            {/* Ganti dengan <img src="/map.jpg" /> atau embed iframe Google Maps */}
-            <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500">Map Placeholder</div>
+            {/* Menggunakan Iframe Google Maps (Bisa kamu ganti koordinat/linknya nanti sesuai alamat asli) */}
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126646.20966453139!2d112.65992685955684!3d-7.27561201509355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fbf8381ac47f%3A0x3027a76e352be40!2sSurabaya%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
         </div>
       </div>
 
       {/* Bottom Footer: Payment & Copyright */}
       <div className="max-w-7xl mx-auto px-8 border-t border-gray-300 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="flex gap-4">
-          {/* Gunakan gambar logo bank asli nantinya */}
-          <div className="h-6 w-12 bg-gray-300 rounded text-[8px] flex items-center justify-center">QRIS</div>
-          <div className="h-6 w-12 bg-gray-300 rounded text-[8px] flex items-center justify-center">BCA</div>
-          <div className="h-6 w-12 bg-gray-300 rounded text-[8px] flex items-center justify-center">BRI</div>
-          <div className="h-6 w-12 bg-gray-300 rounded text-[8px] flex items-center justify-center">DANA</div>
-          <div className="h-6 w-12 bg-gray-300 rounded text-[8px] flex items-center justify-center">Gopay</div>
-          <div className="h-6 w-12 bg-gray-300 rounded text-[8px] flex items-center justify-center">ShopeePay</div>
+        
+        {/* Wadah Gambar Logo Pembayaran */}
+        <div className="flex gap-4 items-center flex-wrap">
+          <img src="/qris.png" alt="QRIS" className="h-5 object-contain" />
+          <img src="/bca.png" alt="BCA" className="h-5 object-contain" />
+          <img src="/bri.png" alt="BRI" className="h-5 object-contain" />
+          <img src="/dana.png" alt="DANA" className="h-5 object-contain" />
+          <img src="/gopay.png" alt="Gopay" className="h-5 object-contain" />
+          <img src="/shopee.png" alt="ShopeePay" className="h-5 object-contain" />
         </div>
+
         <div className="text-sm text-gray-500 font-medium">
           © areng. All rights reserved.
         </div>

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import TopBanner from "../components/TopBanner";
-import Navbar from "../components/Navbar";
+import TopBanner from "../../components/TopBanner";
+import Navbar from "../../components/Navbar";
 
 export default function LoginSignUp() {
   const [lang, setLang] = useState("id");

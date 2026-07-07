@@ -1,6 +1,6 @@
 export default function TopBanner({ lang, toggleLanguage }) {
   const content = {
-    id: { text: "Mencari pesanan skala besar? Beralih ke toko ", link: "Global kami." },
+    id: { text: "Mencari pesanan skala besar? Beralih ke toko ", link: "Lokal." },
     en: { text: "Looking to order in bulk? Switch to our ", link: "Global store." },
   };
   const t = content[lang];
