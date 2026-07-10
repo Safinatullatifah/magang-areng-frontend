@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";  
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import TopBanner from "../components/TopBanner";
@@ -10,9 +10,13 @@ import Footer from "../components/Footer";
 export default function ProdukPage() {
   const router = useRouter();
   const [lang, setLang] = useState("id");
+  useEffect(() => {
+    const savedLang = localStorage.getItem("preferredLang");
+    if (savedLang) {
+      setLang(savedLang);
+    }
+  }, []);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  
-  // State untuk mengatur FAQ mana yang terbuka (null = tidak ada yang terbuka)
   const [openFaq, setOpenFaq] = useState(0); 
 
   const [cartItems, setCartItems] = useState([
@@ -20,62 +24,77 @@ export default function ProdukPage() {
     { id: 2, name: "Briket Arang Bambu", price: 49000, qty: 1 }
   ]);
 
-  const toggleLanguage = () => setLang(lang === "id" ? "en" : "id");
+  const toggleLanguage = () => {
+    const newLang = lang === "id" ? "en" : "id";
+    setLang(newLang);
+    localStorage.setItem("preferredLang", newLang);
+  };
   const toggleCart = () => setIsCartOpen(!isCartOpen);
-
-  // Toggle buka/tutup FAQ
-  const handleFaqClick = (index) => {
-    setOpenFaq(openFaq === index ? null : index);
-  };
-
-  const t = {
-    hero: { title: "Arang Premium untuk Setiap Kebutuhan", subtitle: "Temukan suplai arang briket berkualitas untuk kebutuhan kuliner, industri, dan ekspor.", btn: "Jelajahi Produk" },
-    whyUs: "Mengapa Kami",
-    productSub: "PRODUK KAMI",
-    productTitle: "Arang Briket Berkualitas",
-  };
-
+  const handleFaqClick = (index) => setOpenFaq(openFaq === index ? null : index);
   const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
-  const otherProducts = [
-    { id: 'serbuk', name: 'Briket Arang Serbuk', price: '12,000', tag: 'Warung, Industri Kecil', desc: 'Panas kuat dari limbah kayu industri. Efisien untuk kuliner skala menengah.' },
-    { id: 'kayu', name: 'Briket Arang Kayu', price: '18,000', tag: 'Pemanggangan Rumahan', desc: 'Dari kayu padat yang dikompres. Bakar stabil dengan aroma alami khas.' },
-    { id: 'bambu', name: 'Briket Arang Bambu', price: '49,000', tag: 'BBQ Kelas atas, Resto Asia', desc: 'Pembakaran bersih, kontrol suhu presisi, antimikroba alami. Standar restoran.' },
-    { id: 'sekam', name: 'Briket Arang Sekam Padi', price: '9,000', tag: 'Biomassa, Industri Bata', desc: 'Dari limbah pertanian: sekam padi dan ampas tebu. Bahan bakar ramah lingkungan.' }
-  ];
-
-  // Data List FAQ sesuai desain
-  const faqs = [
-    {
-      q: "Bagaimana cara menyalakan briket yang benar?",
-      a: "Susun briket dalam bentuk piramida atau gunakan chimney starter. Beri sedikit pemantik/fire starter di bagian bawah, lalu nyalakan. Tunggu hingga briket berubah warna abu-abu (sekitar 15-20 menit) sebelum digunakan untuk memasak, menandakan suhu sudah stabil dan siap pakai."
-    },
-    {
-      q: "Berapa lama briket bisa disimpan?",
-      a: "Briket dapat disimpan hingga 2-3 tahun asalkan diletakkan di tempat yang kering, kedap udara, dan tidak terkena kelembapan langsung."
-    },
-    {
-      q: "Apa perbedaan briket dengan arang kayu biasa?",
-      a: "Briket memiliki panas yang lebih konsisten, durasi bakar lebih lama, tidak berasap pekat, dan abu yang dihasilkan jauh lebih sedikit dibandingkan arang kayu biasa."
-    },
-    {
-      q: "Apa yang terjadi jika produk rusak atau basah saat sampai?",
-      a: "Kami memberikan garansi pengiriman. Silakan hubungi tim support kami dengan melampirkan video unboxing, dan kami akan memproses pergantian barang."
-    },
-    {
-      q: "Apakah ada harga khusus untuk pembelian grosir?",
-      a: "Tentu saja! Kami menyediakan potongan harga spesial untuk pembelian skala besar atau mitra B2B (restoran/industri). Silakan hubungi kontak kami untuk penawaran."
-    },
-    {
-      q: "Apa saja opsi pengiriman yang tersedia?",
-      a: "Kami menduku pengiriman via darat dan laut untuk skala besar, serta kargo dan ekspedisi reguler (JNE, Paxel, Pos) untuk pembelian eceran."
+  // Fungsi dinamis untuk tombol utama berdasarkan bahasa
+  const handlePrimaryAction = (e) => {
+    e.preventDefault();
+    if (lang === "en") {
+      router.push('/request-quotation'); // Alur Global
+    } else {
+      setIsCartOpen(!isCartOpen); // Alur Lokal
     }
-  ];
+  };
+
+  // Kamus Bahasa Lengkap (Lokal & Global)
+  const content = {
+    id: {
+      hero: { title: "Arang Premium untuk Setiap Kebutuhan", subtitle: "Temukan suplai arang briket berkualitas untuk kebutuhan kuliner, industri, dan ekspor.", btn: "Jelajahi Produk" },
+      whyUs: "Mengapa Kami",
+      productSub: "PRODUK KAMI",
+      productTitle: "Arang Briket Berkualitas",
+      btnAction: "+ Tambah ke Keranjang",
+      processTitle: "Bahan Baku Hingga Briket Siap Pakai",
+      processImg: "/produksi.png",
+      faqTitle: "Pertanyaan yang Sering Diajukan",
+      products: [
+        { id: 'serbuk', name: 'Briket Arang Serbuk', price: '12,000', tag: 'Warung, Industri Kecil', desc: 'Panas kuat dari limbah kayu industri. Efisien untuk kuliner skala menengah.' },
+        { id: 'kayu', name: 'Briket Arang Kayu', price: '18,000', tag: 'Pemanggangan Rumahan', desc: 'Dari kayu padat yang dikompres. Bakar stabil dengan aroma alami khas.' },
+        { id: 'bambu', name: 'Briket Arang Bambu', price: '49,000', tag: 'BBQ Kelas atas, Resto Asia', desc: 'Pembakaran bersih, kontrol suhu presisi, antimikroba alami. Standar restoran.' },
+        { id: 'sekam', name: 'Briket Arang Sekam Padi', price: '9,000', tag: 'Biomassa, Industri Bata', desc: 'Dari limbah pertanian: sekam padi dan ampas tebu. Bahan bakar ramah lingkungan.' }
+      ],
+      faqs: [
+        { q: "Bagaimana cara menyalakan briket yang benar?", a: "Susun briket dalam bentuk piramida atau gunakan chimney starter..." },
+        { q: "Berapa lama briket bisa disimpan?", a: "Briket dapat disimpan hingga 2-3 tahun asalkan diletakkan di tempat yang kering..." }
+      ]
+    },
+    en: {
+      hero: { title: "Expert-Grade Charcoal, Crafted for Premium Quality", subtitle: "Source globally recognized charcoal for culinary, industrial, and export needs.", btn: "Explore Products" },
+      whyUs: "Why Partner with Us",
+      productSub: "OUR PRODUCTS",
+      productTitle: "Export-grade Charcoal for Global Markets",
+      btnAction: "Request Quotation",
+      processTitle: "Bridging Local Production with Global Quality Standards",
+      processImg: "/produksi-en.png", // Nanti buat versi inggrisnya
+      faqTitle: "Common Questions",
+      products: [
+        { id: 'serbuk', name: 'Sawdust Charcoal Briquette', price: 'Ask', tag: 'A Grade', desc: 'High heat from industrial wood waste. Efficient for medium scale culinary.' },
+        { id: 'kayu', name: 'Hardwood Charcoal Briquette', price: 'Ask', tag: 'Premium', desc: 'From compressed solid wood. Stable burning with natural aroma.' },
+        { id: 'bambu', name: 'Premium Shisha/Hookah Cube', price: 'Ask', tag: 'Export Quality', desc: 'Clean burn, precise temp control, white ash. Top tier standard.' },
+        { id: 'sekam', name: 'Quick-Glow Shisha Tablet', price: 'Ask', tag: 'Instant Light', desc: 'Fast ignition for immediate use. Perfect for lounges and cafes.' }
+      ],
+      faqs: [
+        { q: "What is your minimum order quantity (MOQ)?", a: "Our MOQ for global shipping is typically one 20ft container..." },
+        { q: "Which payment methods do you accept?", a: "We accept T/T (Telegraphic Transfer) and L/C (Letter of Credit)..." }
+      ]
+    }
+  };
+
+  const t = content[lang];
+
+  // ... (lanjutkan dengan return seperti biasa, pastikan variabel array seperti `otherProducts` diganti menjadi `t.products` dan `faqs` diganti `t.faqs` di dalam blok JSX-nya)
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] font-sans text-gray-800 relative overflow-hidden">
+    <div className="min-h-screen bg-[#F9F9F9] font-sans text-gray-800 relative">
       <TopBanner lang={lang} toggleLanguage={toggleLanguage} />
-      <Navbar lang={lang} onCartClick={toggleCart} />
+      <Navbar lang={lang} onCartClick={handlePrimaryAction} />
 
       {/* 1. HERO SECTION */}
       <section id="hero" className="relative h-[60vh] flex items-center justify-center text-center px-4">
@@ -133,15 +152,15 @@ export default function ProdukPage() {
                 </div>
                 <div className="flex justify-between items-center mt-auto relative z-20">
                     <div className="text-2xl font-extrabold">Rp 25.000<span className="text-sm font-normal text-gray-500"> / kg</span></div>
-                    <button onClick={toggleCart} className="bg-[#4C9A2A] hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition">
-                        + Tambah ke Keranjang
-                    </button>
+                    <button onClick={handlePrimaryAction} className="bg-[#4C9A2A] hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition">
+  {t.btnAction}
+</button>
                 </div>
             </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-           {otherProducts.map((prod) => (
+           {t.products.map((prod) => (
              <Link href="/produk/detail" key={prod.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col group hover:shadow-md transition-shadow relative">
                <div className="relative h-40 bg-gray-200 overflow-hidden">
                   <div className="w-full h-full bg-gray-700 group-hover:scale-105 transition-transform duration-300"></div>
@@ -152,7 +171,7 @@ export default function ProdukPage() {
                  <p className="text-xs text-gray-500 mb-4 line-clamp-3">{prod.desc}</p>
                  <div className="flex justify-between items-end mt-auto">
                    <span className="text-[10px] font-bold text-[#4C9A2A]">{prod.tag}</span>
-                   <button className="bg-gray-100 p-2 rounded-lg hover:bg-gray-200 relative z-20" onClick={(e) => { e.preventDefault(); toggleCart(); }}>
+                   <button className="bg-gray-100 p-2 rounded-lg hover:bg-gray-200 relative z-20" onClick={handlePrimaryAction}>
                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                    </button>
                  </div>
@@ -190,7 +209,7 @@ export default function ProdukPage() {
              
              {/* List Accordion FAQ */}
              <div className="space-y-4">
-               {faqs.map((faq, index) => (
+               {t.faqs.map((faq, index) => (
                  <div 
                    key={index} 
                    className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm transition-all"

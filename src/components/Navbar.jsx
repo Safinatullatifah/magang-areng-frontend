@@ -20,7 +20,7 @@ export default function Navbar({ lang, onCartClick }) {
   const t = navItems[lang];
 
   return (
-    <nav className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center">
+    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center">
       <div className="flex items-center gap-10">
         
         {/* Logo (Bisa diklik balik ke Home) */}
