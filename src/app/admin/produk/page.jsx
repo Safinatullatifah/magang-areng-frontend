@@ -59,6 +59,7 @@ export default function AdminProduk() {
                       if(menu === "Dashboard") router.push("/admin/dashboard");
                       else if(menu === "Product") router.push("/admin/produk");
                       else if(menu === "Order") router.push("/admin/order");
+                      else if(menu === "Payment") router.push("/admin/pembayaran");
                       else setActiveMenu(menu);
                     }}
                     className={`w-full flex flex-row items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-colors text-left ${

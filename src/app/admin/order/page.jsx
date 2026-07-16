@@ -66,6 +66,7 @@ export default function AdminOrder() {
                       if(menu === "Dashboard") router.push("/admin/dashboard");
                       else if(menu === "Product") router.push("/admin/produk");
                       else if(menu === "Order") router.push("/admin/order");
+                      else if(menu === "Payment") router.push("/admin/pembayaran");
                       else setActiveMenu(menu);
                     }}
                     className={`w-full flex flex-row items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-colors text-left ${
@@ -249,7 +250,7 @@ export default function AdminOrder() {
                   <div className="text-xs text-gray-500">Estimasi: 5 Ton</div>
                </div>
                <h3 className="text-[#52A32D] font-bold mb-4">Pesan Tambahan</h3>
-               <p className="text-sm text-gray-600 italic bg-gray-50 p-4 rounded-lg">"Kami tertarik untuk kerja sama jangka panjang. Mohon info harga terbaik untuk kapasitas 5 ton."</p>
+               <p className="text-sm text-gray-600 italic bg-gray-50 p-4 rounded-lg">&quot; Kami tertarik untuk kerja sama jangka panjang. Mohon info harga terbaik untuk kapasitas 5 ton.&quot;</p>
             </div>
 
             <div className="bg-green-50 p-6 rounded-xl border border-green-100">
