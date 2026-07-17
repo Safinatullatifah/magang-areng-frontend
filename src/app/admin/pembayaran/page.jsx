@@ -39,6 +39,13 @@ export default function AdminPembayaran() {
     setSelectedPayment(payment);
     setView("detail");
   };
+ // Logika Filter Data Payment
+  const filteredPayments = (marketType === "lokal" ? dummyLokal : dummyGlobal).filter((pay) => {
+    if (activeTab === "Semua Transaksi") return true;
+    // Khusus global, anggap 'Menunggu Verifikasi' masuk kategori 'Belum Lunas'
+    if (activeTab === "Belum Lunas" && pay.status.includes("Menunggu")) return true;
+    return pay.status === activeTab;
+  });
 
   return (
     <div className="min-h-screen flex bg-[#F9F9F9] font-sans text-gray-800">
@@ -150,7 +157,7 @@ export default function AdminPembayaran() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {(marketType === "lokal" ? dummyLokal : dummyGlobal).map((pay, idx) => (
+                  {filteredPayments.map((pay, idx) => (
                     <tr key={idx} className="hover:bg-gray-50">
                       <td className="py-4 px-6 text-sm font-bold text-gray-800">{pay.id}<br/><span className="text-xs font-normal text-gray-500">{marketType === "lokal" ? `Pesanan: ${pay.orderId}` : `Quote: ${pay.quoteId}`}</span></td>
                       <td className="py-4 px-6 text-sm text-gray-600">{pay.date}</td>

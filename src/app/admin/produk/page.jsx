@@ -10,6 +10,7 @@ export default function AdminProduk() {
   const [activeMenu, setActiveMenu] = useState("Product");
   const [marketType, setMarketType] = useState("lokal"); // 'lokal' atau 'global'
   const [view, setView] = useState("list"); // 'list' atau 'form'
+  const [activeTab, setActiveTab] = useState("Semua Produk");
   
   // State untuk Modals
   const [modalType, setModalType] = useState(null); // null, 'delete', atau 'success'
@@ -35,6 +36,12 @@ export default function AdminProduk() {
     setModalType("success");
     setTimeout(() => setModalType(null), 2000); // Tutup otomatis setelah 2 detik
   };
+// Logika Filter Data Product
+  const filteredProducts = (marketType === "lokal" ? lokalProducts : globalProducts).filter((prod) => {
+    if (activeTab === "Semua Produk") return true;
+    if (activeTab === "Stok Habis") return prod.status === "Habis";
+    return prod.status === activeTab;
+  });
 
   return (
     <div className="min-h-screen flex bg-[#F9F9F9] font-sans text-gray-800">
@@ -151,12 +158,17 @@ export default function AdminProduk() {
         {/* ================= KONDISI 1: TAMPILAN TABEL ================= */}
         {view === "list" && (
           <div className="animate-fade-in">
-            {/* Filter Tabs (Semua Produk, Aktif, dll) */}
+           {/* Filter Tabs */}
             <div className="flex gap-8 mb-6 text-sm font-bold text-gray-500 border-b border-gray-200 pb-2">
-              <button className="text-[#52A32D] border-b-2 border-[#52A32D] pb-2 -mb-[9px]">Semua Produk</button>
-              <button className="hover:text-gray-800">Aktif</button>
-              <button className="hover:text-gray-800">Non-Aktif</button>
-              <button className="hover:text-gray-800">Stok Habis</button>
+              {["Semua Produk", "Aktif", "Non-Aktif", "Stok Habis"].map(tab => (
+                <button 
+                  key={tab} 
+                  onClick={() => setActiveTab(tab)}
+                  className={activeTab === tab ? "text-[#52A32D] border-b-2 border-[#52A32D] pb-2 -mb-[9px]" : "hover:text-gray-800"}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -181,7 +193,7 @@ export default function AdminProduk() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {(marketType === "lokal" ? lokalProducts : globalProducts).map((prod) => (
+                  {filteredProducts.map((prod) => (
                     <tr key={prod.id} className="hover:bg-gray-50">
                       <td className="py-4 px-6 text-sm font-bold text-gray-800 flex items-center gap-3">
                         <div className="w-10 h-10 bg-gray-200 rounded-md"></div>

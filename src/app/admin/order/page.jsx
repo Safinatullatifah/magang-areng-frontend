@@ -44,6 +44,13 @@ export default function AdminOrder() {
     setView("detail");
   };
 
+   // Logika Filter Data Order
+  const filteredOrders = (marketType === "lokal" ? dummyLokal : dummyGlobal).filter((order) => {
+    const currentTab = marketType === "lokal" ? tabLokal : tabGlobal;
+    if (currentTab === "Semua") return true;
+    return order.status === currentTab;
+  });
+
   return (
     <div className="min-h-screen flex bg-[#F9F9F9] font-sans text-gray-800">
       
@@ -169,7 +176,7 @@ export default function AdminOrder() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {(marketType === "lokal" ? dummyLokal : dummyGlobal).map((order, idx) => (
+                  {filteredOrders.map((order, idx) => (
                     <tr key={idx} className="hover:bg-gray-50">
                       <td className="py-4 px-6 text-sm font-bold text-gray-800">{order.id}</td>
                       <td className="py-4 px-6 text-sm text-gray-600">{order.date}</td>
